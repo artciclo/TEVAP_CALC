@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Fossa Séptica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .materials {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <h2>Calculadora de Fossa Séptica</h2>
+        <label for="people">Número de Pessoas:</label>
+        <input type="number" id="people" placeholder="Ex: 5" min="1" required>
+        
+        <button onclick="calcularFossa()">Calcular</button>
+
+        <div id="result" class="result" style="display:none;">
+            <h3>Resultado</h3>
+            <p><strong>Volume da Fossa:</strong> <span id="volume"></span> m³</p>
+            <div class="materials">
+                <p><strong>Cimento:</strong> <span id="cimento"></span> sacos</p>
+                <p><strong>Areia:</strong> <span id="areia"></span> m³</p>
+                <p><strong>Tijolos:</strong> <span id="tijolos"></span> unidades</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcularFossa() {
+            const pessoas = document.getElementById('people').value;
+            
+            if (pessoas <= 0) {
+                alert("Por favor, insira um número válido de pessoas.");
+                return;
+            }
+
+            // Volume da fossa: aproximadamente 1m³ por pessoa
+            const volumeFossa = pessoas * 1;
+
+            // Materiais aproximados com base no volume da fossa
+            const cimento = volumeFossa * 2; // Aproximadamente 2 sacos de cimento por m³
+            const areia = volumeFossa * 1.5; // Aproximadamente 1.5 m³ de areia por m³
+            const tijolos = volumeFossa * 300; // Aproximadamente 300 tijolos por m³
+
+            // Exibe o resultado
+            document.getElementById('volume').innerText = volumeFossa.toFixed(2);
+            document.getElementById('cimento').innerText = cimento.toFixed(2);
+            document.getElementById('areia').innerText = areia.toFixed(2);
+            document.getElementById('tijolos').innerText = tijolos;
+
+            // Mostrar a div de resultados
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

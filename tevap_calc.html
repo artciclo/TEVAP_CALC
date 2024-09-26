@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Fossa Ecológica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .results p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora de Fossa Ecológica</h1>
+    
+    <label for="numPessoas">Número de Pessoas Atendidas</label>
+    <input type="number" id="numPessoas" placeholder="Digite o número de pessoas atendidas">
+
+    <label for="profundidade">Profundidade do Tanque (m)</label>
+    <input type="number" id="profundidade" step="0.50" placeholder="Digite a profundidade do tanque (ex: 1.5)">
+
+    <label for="largura">Largura do Tanque (m)</label>
+    <input type="number" id="largura" step="0.1" placeholder="Digite a largura do tanque (ex: 2.5)">
+    
+    <label for="comprimento">Comprimento do Tanque (m)</label>
+    <input type="number" id="comprimento" step="0.1" placeholder="Digite o comprimento do tanque (ex: 8)">
+    
+    <button onclick="calcularFossa()">Calcular Materiais</button>
+    
+    <div class="results" id="resultados" style="display: none;">
+        <h3>Resultados</h3>
+        <p><strong>Área Total Impermeabilizada (m²):</strong> <span id="areaImpermeabilizada"></span></p>
+        <p><strong>Lona (m²):</strong> <span id="lona"></span></p>
+        <p><strong>Manta Bidin (m²):</strong> <span id="mantaBidin"></span></p>
+        <p><strong>Pneus Necessários (un):</strong> <span id="pneus"></span></p>
+        <p><strong>Volume de Entulho (m³):</strong> <span id="entulho"></span></p>
+        <p><strong>Quantidade de Terra (m³):</strong> <span id="terra"></span></p>
+        <p><strong>Bananeiras (un):</strong> <span id="bananeiras"></span></p>
+        <p><strong>Tijolos (un):</strong> <span id="tijolos"></span></p>
+        <p><strong>Argamassa (kg):</strong> <span id="argamassa"></span></p>
+        <p><strong>Canos (m):</strong> <span id="canos"></span></p>
+    </div>
+</div>
+
+<script>
+function calcularFossa() {
+    // Coletar os valores de entrada
+    var numPessoas = document.getElementById('numPessoas').value;
+    var profundidade = parseFloat(document.getElementById('profundidade').value);
+    var largura = parseFloat(document.getElementById('largura').value);
+    var comprimento = parseFloat(document.getElementById('comprimento').value);
+
+    // Parâmetros fixos
+    var areaCamaraDigestao = 0.36; // m²
+    var rendimentoArgamassa = 1.36; // kg por tijolo
+    var rendimentoTijolo = 12.5; // Blocos/m²
+    var rendimentoArgamassaKg = 17; // kg de argamassa por m² de parede
+
+    // Cálculos
+    var volumeTanque = largura * comprimento * profundidade; // Volume do tanque
+    var perimetroTanque = 2 * (largura + comprimento); // Perímetro do tanque
+    var areaTotalImpermeabilizada = (largura * comprimento) + perimetroTanque * 0.5; // Área total impermeabilizada (fundo + margem)
+
+    var lona = areaTotalImpermeabilizada; // Lona em m²
+    var mantaBidin = (largura * comprimento) * 1.05; // Manta bidin com 5% extra
+    var pneus = Math.floor((largura * comprimento) / 0.22); // Pneus (22cm cada)
+    
+    var volumeEntulho = (profundidade * largura * comprimento) - areaCamaraDigestao; // Volume de entulho
+    var volumeTerra = volumeTanque - volumeEntulho; // Volume de terra
+
+    var bananeiras = Math.ceil((largura + comprimento) / 1); // Bananeiras (1m de distância)
+    var tijolos = Math.ceil(perimetroTanque / 0.39); // Tijolos (39cm cada)
+    var argamassa = tijolos * rendimentoArgamassa; // Argamassa em kg
+    var canos = profundidade * 2 + 0.5; // Metros de cano
+
+    // Exibir os resultados
+    document.getElementById('areaImpermeabilizada').innerText = areaTotalImpermeabilizada.toFixed(2);
+    document.getElementById('lona').innerText = lona.toFixed(2);
+    document.getElementById('mantaBidin').innerText = mantaBidin.toFixed(2);
+    document.getElementById('pneus').innerText = pneus;
+    document.getElementById('entulho').innerText = volumeEntulho.toFixed(2);
+    document.getElementById('terra').innerText = volumeTerra.toFixed(2);
+    document.getElementById('bananeiras').innerText = bananeiras;
+    document.getElementById('tijolos').innerText = tijolos;
+    document.getElementById('argamassa').innerText = argamassa.toFixed(2);
+    document.getElementById('canos').innerText = canos.toFixed(2);
+
+    document.getElementById('resultados').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
